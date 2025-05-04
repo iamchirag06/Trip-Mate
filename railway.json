@@ -1,0 +1,7 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "cd demo && ./mvnw clean package",
+    "startCommand": "java -jar demo/target/demo-0.0.1-SNAPSHOT.jar"
+  }
+}
