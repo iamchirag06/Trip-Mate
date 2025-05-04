@@ -1,7 +1,9 @@
 {
   "build": {
-    "builder": "NIXPACKS",
-    "buildCommand": "cd demo && ./mvnw clean package",
-    "startCommand": "java -jar demo/target/demo-0.0.1-SNAPSHOT.jar"
+    "builder": "nixpacks",
+    "buildCommand": "cd demo && ./mvnw clean package"
+  },
+  "deploy": {
+    "startCommand": "java -jar demo/target/demo-1.0.0.jar"
   }
 }
