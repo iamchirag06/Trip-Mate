@@ -10,6 +10,8 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // You can restrict this to /api/** if needed
+                .allowedOrigins("https://5173-idx-full-app-1746337034808.cluster-iktsryn7xnhpexlu6255bftka4.cloudworkstations.dev/")
+                .allowedOrigins("https://5173-idx-full-app-1746337034808.cluster-iktsryn7xnhpexlu6255bftka4.cloudworkstations.dev/suggest")
                 .allowedOrigins("http://localhost:5173") // React dev server
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*");
