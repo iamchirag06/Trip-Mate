@@ -14,16 +14,13 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(
-                                "http://localhost:3000",                    // React dev server
-                                "https://5173-idx-full-app-1746337034808.cluster-iktsryn7xnhpexlu6255bftka4.cloudworkstations.dev/",
-                                "https://5173-idx-full-app-1746337034808.cluster-iktsryn7xnhpexlu6255bftka4.cloudworkstations.dev/suggest"
-                        )
+                        .allowedOriginPatterns("*") // Allows any origin
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true);
+                        .allowCredentials(false); // Must be false when using "*"
             }
         };
     }
 }
+
 
