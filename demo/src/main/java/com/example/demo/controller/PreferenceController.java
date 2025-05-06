@@ -19,8 +19,12 @@ public class PreferenceController {
     }
 
     @GetMapping
-    public List<Preference> getAll() {
-        return service.getAll();
+    public ResponseEntity<List<Preference>> getFilteredPreferences(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "budget", required = false) Double budget,
+            @RequestParam(value = "days", required = false) Integer days) {
+        List<Preference> preferences = service.getFilteredPreferences(type, budget, days);
+        return ResponseEntity.ok(preferences);
     }
 
     @GetMapping("/{id}")
@@ -31,20 +35,49 @@ public class PreferenceController {
     }
 
     @PostMapping
-    public ResponseEntity<Preference> create(@Valid @RequestBody Preference preference) {
-        return ResponseEntity.status(201).body(service.save(preference));
+    public ResponseEntity<?> create(@Valid @RequestBody Preference preference) {
+        try {
+            Preference saved = service.save(preference);
+            return ResponseEntity.status(201).body(saved);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Preference> update(@PathVariable String id, @Valid @RequestBody Preference preference) {
-        return service.update(id, preference)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> update(@PathVariable String id, @Valid @RequestBody Preference preference) {
+        try {
+            return service.update(id, preference)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.ok("Deleted preference with ID: " + id);
+    }
+
+    @GetMapping("/domestic")
+    public ResponseEntity<List<Preference>> getDomesticTrips(
+            @RequestParam(value = "budget", required = false) Double budget,
+            @RequestParam(value = "days", required = false) Integer days) {
+        List<Preference> preferences = service.getDomesticPreferencesWithFilters(budget, days);
+        return preferences.isEmpty() ?
+                ResponseEntity.noContent().build() :
+                ResponseEntity.ok(preferences);
+    }
+
+    @GetMapping("/international")
+    public ResponseEntity<List<Preference>> getInternationalTrips(
+            @RequestParam(value = "budget", required = false) Double budget,
+            @RequestParam(value = "days", required = false) Integer days) {
+        List<Preference> preferences = service.getInternationalPreferencesWithFilters(budget, days);
+        return preferences.isEmpty() ?
+                ResponseEntity.noContent().build() :
+                ResponseEntity.ok(preferences);
     }
 }
